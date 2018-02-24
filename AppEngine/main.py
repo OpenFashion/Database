@@ -5,7 +5,7 @@ import webapp2
 
 def get(self):
     bucket_name = os.environ.get(
-        'BUCKET_NAME', app_identity.get_default_gcs_bucket_name())
+        'openfashion-196206.appspot.com', app_identity.get_default_gcs_bucket_name())
 
     self.response.headers['Content-Type'] = 'text/plain'
     self.response.write(
