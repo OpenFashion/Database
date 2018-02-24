@@ -90,9 +90,23 @@ def add_noise(avg):
 	return (randR, randG, randB)
 
 
+#returns average side color in top, right, bottom, left order
+#clockwise from top
+def getSideAvg(image):
+	# each is a tuple of the RGB corresponding to the average pixel value of
+	# each side: left right top bottom
+	tColor = get_average_color_tb(0,image)
+	bColor = get_average_color_tb(1,image)
+	lColor = get_average_color_lr(0,image)
+	rColor = get_average_color_lr(1,image)
+
+	return (tColor, rColor, bColor, lColor)
+
+
 # calls all other functions: rotates image, evaluates average pixel value 
 # of each side and fills rotated image corners
-def rotAndFill(image, angle):
+# colors contains average RGB value in tuple, clockwise from top
+def rotAndFill(image, angle, colors):
 	angleRad = angle *3.14159 /180
 
 	imWidth, imHeight = image.size
@@ -101,10 +115,13 @@ def rotAndFill(image, angle):
 
 	# each is a tuple of the RGB corresponding to the average pixel value of
 	# each side: left right top bottom
-	tColor = get_average_color_tb(0,image)
-	bColor = get_average_color_tb(1,image)
-	lColor = get_average_color_lr(0,image)
-	rColor = get_average_color_lr(1,image)
+	tColor = colors[0]
+	rColor = colors[1]
+	bColor = colors[2]
+	lColor = colors[3]
+
+	#,rColor,bColor,lColor = getSideAvg(image)
+	
 
 	#loads rotated image into array
 	pix = rot.load()
@@ -161,31 +178,41 @@ def rotAndFill(image, angle):
 
 	return rot
 
+def outImages(image):
 
-#TESTING
-
-if __name__ == "__main__":
-	src_im = Image.open("shirt.jpg")
+	colors = getSideAvg(image)
 
 	maxsize = (500, 500)
+	ang = -30
+	flip = False
+	ret =[]
 
-	ang = 16
-	tn_image = src_im.thumbnail(maxsize, Image.ANTIALIAS)
+	while ang<35:
 
-	rot = rotAndFill(src_im, ang)
+		if ang<0:
+			ang=-ang
+			flip = True
 
-	rot.save("testNew.jpg")
+		tn_image = im.thumbnail(maxsize, Image.ANTIALIAS)
+		rot = rotAndFill(im, ang, colors)
 
-	# testIm = Image.new("RGB", (200,200))
-	# pix = testIm.load()
+		if flip:
+			rot=rot.transpose(Image.FLIP_LEFT_RIGHT)
+			ang = -ang
 
-	# avg = get_average_color_tb(0, src_im)
-	# for x in range(200):
-	# 	for y in range(200):
-	# 		randR = add_noise(avg[0])
-	# 		randG = add_noise(avg[1])
-	# 		randB = add_noise(avg[2])
+		ang+=5
+		flip=False
 
-	# 		pix[x,y] =  (randR, randG, randB)
+		ret.append(rot)
+	
 
-	#testIm.save("testNew.jpg")
+	return ret
+
+
+#TESTING
+if __name__ == "__main__":
+	im = Image.open("shirt.jpg")
+
+	rot = outImages(im)
+
+	rot[0].save("testNew.jpg")
