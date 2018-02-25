@@ -211,8 +211,8 @@ def outImages(image):
 
 #TESTING
 if __name__ == "__main__":
-	im = Image.open("shirt.jpg")
+# 	im = Image.open("shirt.jpg")
 
-	rot = outImages(im)
+# 	rot = outImages(im)
 
-	rot[0].save("testNew.jpg")
+# 	rot[0].save("testNew.jpg")
