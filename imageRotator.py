@@ -1,6 +1,7 @@
 from PIL import Image
 import random
 import math
+import sys
 
 #GLOBALS
 PERCENT = 0.01
@@ -111,6 +112,7 @@ def rotAndFill(image, angle, colors):
 
 	imWidth, imHeight = image.size
 	rot = image.rotate(angle, expand=2)
+
 	width, height = rot.size
 
 	# each is a tuple of the RGB corresponding to the average pixel value of
@@ -210,9 +212,9 @@ def outImages(image):
 
 
 #TESTING
-if __name__ == "__main__":
-# 	im = Image.open("shirt.jpg")
+# if __name__ == "__main__":
+# 	im = Image.open("sleep.png")
 
 # 	rot = outImages(im)
 
-# 	rot[0].save("testNew.jpg")
+# 	rot[10].save("pngTest.png")
